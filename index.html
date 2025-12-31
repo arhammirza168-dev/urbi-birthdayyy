@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For Urbi 💖</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --pink:#ff77b7;
+      --pink2:#ffb6d5;
+      --soft:#fff5fb;
+      --ink:#111827;
+      --paper:#f7f4ef;
+      --paper2:#efeae3;
+      --blue:#1d4ed8;
+      --blue2:#60a5fa;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      height:100vh;
+      overflow:hidden;
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background:#fff;
+      color:var(--ink);
+    }
+
+    .app{
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    /* ---------- Slides ---------- */
+    .slide{
+      width:min(980px, 95vw);
+      height:min(620px, 85vh);
+      border-radius:22px;
+      position:absolute;
+      padding:28px;
+      opacity:0;
+      transform: translateY(14px);
+      pointer-events:none;
+      transition: opacity .45s ease, transform .45s ease;
+      overflow:hidden;
+    }
+    .slide.active{
+      opacity:1;
+      transform: translateY(0);
+      pointer-events:auto;
+    }
+
+    /* ---------- Buttons ---------- */
+    .btn-row{ display:flex; gap:18px; align-items:center; justify-content:center; flex-wrap:wrap; }
+
+    .btn{
+      border:none;
+      cursor:pointer;
+      padding:12px 44px;
+      border-radius:999px;
+      background: var(--pink2);
+      color:white;
+      font-weight:700;
+      letter-spacing:.6px;
+      box-shadow: 0 10px 22px rgba(255, 105, 180, .25);
+      position:relative;
+      transition: transform .12s ease, box-shadow .12s ease;
+      user-select:none;
+    }
+    .btn::before{
+      content:"";
+      position:absolute;
+      inset:3px 10px auto 10px;
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.55);
+      opacity:.9;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:active{ transform: translateY(2px) scale(.98); box-shadow: 0 6px 16px rgba(255,105,180,.22); }
+
+    .btn.ghost{
+      background: transparent;
+      border: 2px solid rgba(255,119,183,.55);
+      color: var(--pink);
+      box-shadow:none;
+    }
+    .btn.small{ padding:10px 18px; font-size:.95rem; }
+
+    /* ---------- Common white/pink slides ---------- */
+    .s-white{
+      background: linear-gradient(180deg, #ffffff 0%, var(--soft) 100%);
+      border: 1px solid rgba(255, 182, 213, .55);
+      box-shadow: 0 25px 60px rgba(17,24,39,.08);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+    }
+
+    .title-pink{
+      font-family: "DM Serif Display", serif;
+      font-size: clamp(34px, 4vw, 54px);
+      line-height:1.05;
+      color: var(--pink);
+      margin:0;
+      text-align:center;
+    }
+    .subtitle-pink{
+      font-family: "DM Serif Display", serif;
+      font-size: clamp(24px, 3vw, 40px);
+      color: var(--pink);
+      margin:0;
+      text-align:center;
+    }
+
+    /* ---------- Cat bubble (blended) ---------- */
+    .cat-wrap{
+      width: 220px;
+      height: 220px;
+      border-radius: 999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:
+        radial-gradient(circle at 35% 25%, rgba(255,182,213,.85), rgba(255,255,255,0) 60%),
+        radial-gradient(circle at 65% 70%, rgba(255,119,183,.20), rgba(255,255,255,0) 60%);
+      box-shadow: 0 18px 45px rgba(255,105,180,.18);
+      position:relative;
+      overflow:hidden;
+    }
+    .cat-wrap::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle, rgba(255,255,255,0) 55%, rgba(255,245,251,.9) 100%);
+      pointer-events:none;
+      mix-blend-mode: multiply;
+      opacity:.55;
+    }
+    .cat-img{
+      width: 185px;
+      height:auto;
+      display:block;
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,.18));
+      animation: floaty 2.8s ease-in-out infinite;
+    }
+    @keyframes floaty{
+      0%{ transform: translateY(0); }
+      50%{ transform: translateY(-7px); }
+      100%{ transform: translateY(0); }
+    }
+    .sparkle{
+      position:absolute;
+      width:10px; height:10px;
+      border-radius:50%;
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 0 16px rgba(255,182,213,.9);
+      animation: twinkle 1.8s ease-in-out infinite;
+      opacity:.75;
+    }
+    .sparkle.s1{ top:36px; left:38px; animation-delay:.2s; }
+    .sparkle.s2{ bottom:46px; right:50px; animation-delay:.9s; }
+    .sparkle.s3{ top:56px; right:60px; animation-delay:1.3s; }
+    @keyframes twinkle{
+      0%,100%{ transform: scale(.7); opacity:.55; }
+      50%{ transform: scale(1.15); opacity:1; }
+    }
+
+    /* ---------- Fireworks slide ---------- */
+    .s-fireworks{
+      background: #05060a;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 30px 70px rgba(0,0,0,.45);
+      color: white;
+    }
+    #fwCanvas{ position:absolute; inset:0; width:100%; height:100%; z-index:0; }
+    .fw-content{
+      position:relative;
+      z-index:1;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:16px;
+      text-align:center;
+      padding:0 18px;
+    }
+    .fw-title{
+      font-family: "DM Serif Display", serif;
+      font-size: clamp(36px, 4.2vw, 64px);
+      margin:0;
+      line-height:1.05;
+      text-shadow: 0 10px 40px rgba(0,0,0,.45);
+    }
+    .fw-btn{
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.28);
+      box-shadow:none;
+    }
+    .fw-btn::before{ opacity:.4; }
+
+    /* ---------- Gifts slide ---------- */
+    .s-gifts{
+      background: linear-gradient(135deg, #ffffff 0%, #f5f7ff 100%);
+      border: 1px solid rgba(180,200,255,.45);
+      box-shadow: 0 25px 60px rgba(17,24,39,.10);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      gap:10px;
+    }
+    .g-title{
+      font-family: "DM Serif Display", serif;
+      font-size: clamp(34px, 4vw, 58px);
+      margin:0;
+      color:#1f2a55;
+    }
+    .g-sub{
+      margin:0;
+      font-size: 1.2rem;
+      color:#334155;
+      opacity:.85;
+    }
+    .gift-row{
+      display:flex;
+      gap:22px;
+      margin-top:18px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .gift{
+      width:86px; height:86px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:20px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(148,163,184,.25);
+      box-shadow: 0 18px 40px rgba(17,24,39,.08);
+      font-size: 38px;
+      cursor:pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+      user-select:none;
+    }
+    .gift:hover{ transform: translateY(-3px); box-shadow: 0 22px 55px rgba(17,24,39,.10); }
+    .gift:active{ transform: translateY(2px) scale(.98); }
+    .pop{ animation: pop .28s ease; }
+    @keyframes pop{ 0%{ transform: scale(.92);} 60%{ transform: scale(1.04);} 100%{ transform: scale(1);} }
+
+    /* ---------- Gift 1 (OK / stable) ---------- */
+    .s-letter{
+      background: linear-gradient(180deg, var(--paper) 0%, var(--paper2) 100%);
+      border: 1px solid rgba(17,24,39,.08);
+      box-shadow: 0 30px 70px rgba(17,24,39,.14);
+      color:#0f172a;
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:26px;
+      align-items:center;
+      padding:28px;
+    }
+    .letter-big{
+      font-family: "Playfair Display", serif;
+      font-size: clamp(42px, 4.2vw, 70px);
+      margin:0 0 10px;
+      line-height:1.0;
+    }
+    .letter-para{
+      font-size: 1.3rem;
+      margin: 0 0 12px;
+      max-width: 560px;
+    }
+    .signature{
+      margin-top: 16px;
+      font-weight: 700;
+      color: rgba(255, 119, 183, .9);
+      font-family: "DM Serif Display", serif;
+      font-size: 1.2rem;
+    }
+    .photo-card{
+      background:#fff;
+      border-radius:12px;
+      padding:12px 12px 16px;
+      box-shadow: 0 25px 60px rgba(0,0,0,.22);
+      border: 1px solid rgba(15,23,42,.06);
+    }
+    .photo-card img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:10px;
+    }
+
+    /* ---------- Gift 2 (Bouquet) - FIXED + resets ---------- */
+    .s-bouquet{
+      background: linear-gradient(180deg, #ffffff 0%, var(--soft) 100%);
+      border: 1px solid rgba(255, 182, 213, .55);
+      box-shadow: 0 25px 60px rgba(17,24,39,.08);
+      padding:28px;
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:22px;
+      align-items:center;
+    }
+    .bouquet-text{
+      font-family:"DM Serif Display", serif;
+      color: var(--pink);
+      font-size: 32px;
+      line-height: 1.25;
+      white-space: pre-line;
+    }
+    .bouquet-scene{
+      position:relative;
+      width: 320px;
+      height: 320px;
+      margin: 0 auto;
+    }
+    /* start state */
+    .bouquet-cat{
+      position:absolute;
+      left:50%;
+      transform: translateX(-50%);
+      width: 260px;
+      bottom: -340px;
+      filter: drop-shadow(0 18px 26px rgba(0,0,0,.18));
+    }
+    .bouquet-emoji{
+      position:absolute;
+      left:50%;
+      transform: translateX(-50%) scale(0.85);
+      font-size: 62px;
+      bottom: 140px;
+      opacity: 0;
+    }
+    .fx{
+      position:absolute;
+      opacity: 0;
+      transform: translateY(10px);
+      filter: drop-shadow(0 8px 16px rgba(255,119,183,.20));
+      font-size: 28px;
+    }
+    .fx.h1{ left: 20px; top: 70px; }
+    .fx.h2{ right: 28px; top: 90px; }
+    .fx.s1{ left: 62px; top: 26px; }
+    .fx.s2{ right: 70px; top: 38px; }
+
+    /* when active, animate in */
+    .s-bouquet.active .bouquet-cat{ animation: catRise 1.15s ease forwards; }
+    .s-bouquet.active .bouquet-emoji{ animation: bouquetPop .55s ease forwards; animation-delay: .9s; }
+    .s-bouquet.active .fx{ animation: floatFx 1.05s ease forwards; animation-delay: 1.05s; }
+    .s-bouquet.active .fx.h2{ animation-delay: 1.12s; }
+    .s-bouquet.active .fx.s1{ animation-delay: 1.16s; }
+    .s-bouquet.active .fx.s2{ animation-delay: 1.22s; }
+
+    @keyframes catRise{ from{ bottom:-340px; } to{ bottom: 10px; } }
+    @keyframes bouquetPop{ to{ opacity:1; transform: translateX(-50%) scale(1); } }
+    @keyframes floatFx{ to{ opacity:1; transform: translateY(-18px); } }
+
+    /* ---------- Gift 3 (Scrapbook like reference) - FIXED ---------- */
+    .s-moments{
+      background: #f7f4ef;
+      border: 1px solid rgba(59,130,246,.18);
+      box-shadow: 0 25px 60px rgba(17,24,39,.10);
+      position:relative;
+    }
+    .paper-texture{
+      position:absolute; inset:0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(0,0,0,.05), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(0,0,0,.04), transparent 50%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .torn-blue{
+      position:absolute;
+      bottom:-28px; left:-30px; right:-30px;
+      height:150px;
+      background: linear-gradient(90deg, var(--blue), var(--blue2));
+      clip-path: polygon(0 42%, 12% 55%, 24% 45%, 38% 60%, 52% 48%, 66% 64%, 80% 50%, 92% 66%, 100% 52%, 100% 100%, 0 100%);
+      opacity:.95;
+      box-shadow: 0 -18px 55px rgba(29,78,216,.20);
+    }
+    .mom-title{
+      position:absolute;
+      left:110px;
+      bottom:125px;
+      font-family: "DM Serif Display", serif;
+      font-size: 62px;
+      color: var(--blue);
+      transform: rotate(-2deg);
+      text-shadow: 0 10px 30px rgba(29,78,216,.18);
+      line-height:.95;
+    }
+    .sticker-row{
+      position:absolute;
+      right:26px;
+      top:18px;
+      display:flex;
+      gap:14px;
+      font-size: 34px;
+      opacity:.85;
+      user-select:none;
+    }
+    .doodle{
+      position:absolute;
+      color: var(--blue);
+      opacity:.75;
+      user-select:none;
+    }
+    .doodle.arrow{ right:250px; bottom:160px; font-size:42px; transform: rotate(12deg); }
+    .doodle.star{ left:56px; top:150px; font-size:70px; color: var(--blue2); opacity:.65; }
+    .doodle.dots{ right:220px; top:160px; font-size:34px; opacity:.55; }
+
+    .photo-polaroid{
+      position:absolute;
+      width: 320px;
+      background:#fff;
+      border-radius:12px;
+      padding: 12px 12px 18px;
+      box-shadow: 0 30px 70px rgba(0,0,0,.22);
+      border: 1px solid rgba(15,23,42,.06);
+      opacity:0;
+    }
+    .photo-polaroid img{
+      width:100%;
+      height: 230px;
+      object-fit: cover;
+      border-radius:10px;
+      display:block;
+    }
+    .photo-polaroid.left{
+      left:-420px;
+      top:76px;
+      transform: rotate(-4deg);
+      z-index:2;
+    }
+    .photo-polaroid.right{
+      right:-420px;
+      top:112px;
+      transform: rotate(5deg);
+      z-index:3; /* top overlap */
+    }
+
+    /* animate in & overlap nicely */
+    .s-moments.active .photo-polaroid.left{ animation: inLeft 0.85s ease forwards; }
+    .s-moments.active .photo-polaroid.right{ animation: inRight 0.9s ease forwards; animation-delay: .05s; }
+
+    @keyframes inLeft{ to{ left:75px; opacity:1; } }
+    @keyframes inRight{ to{ right:95px; opacity:1; } }
+
+    /* ---------- Gift 4 (Clean music slide) - FIXED ---------- */
+    .s-music{
+      background: #ffffff;
+      border: 1px solid rgba(148,163,184,.30);
+      box-shadow: 0 25px 60px rgba(17,24,39,.10);
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px;
+      align-items:center;
+      padding:28px;
+    }
+    .music-head{
+      font-family:"DM Serif Display", serif;
+      color: var(--pink);
+      font-size: 60px;
+      margin:0 0 8px;
+      line-height:1.02;
+    }
+    .music-sub{
+      margin:0 0 18px;
+      color:#475569;
+      font-size: 1.15rem;
+    }
+    .poster{
+      width:100%;
+      max-width: 360px;
+      border-radius: 14px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.18);
+      border: 1px solid rgba(15,23,42,.08);
+      display:block;
+    }
+    .music-controls{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top: 16px;
+    }
+    .disc-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+    }
+    .disc{
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 10px solid rgba(255,255,255,.9);
+      outline: 1px solid rgba(15,23,42,.08);
+      box-shadow: 0 30px 80px rgba(0,0,0,.18);
+      animation: spin 3.3s linear infinite;
+      animation-play-state: paused;
+    }
+    .disc.playing{ animation-play-state: running; }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+
+    .hint{
+      font-size:.95rem;
+      color:#64748b;
+      margin-top:10px;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 900px){
+      .s-letter, .s-bouquet, .s-music{
+        grid-template-columns: 1fr;
+      }
+      .photo-polaroid{ width: 290px; }
+      .mom-title{ left:24px; bottom:140px; font-size:54px; }
+      .disc{ width: 280px; height: 280px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- Slide 1 -->
+    <section class="slide s-white active" id="slide1">
+      <div class="cat-wrap">
+        <span class="sparkle s1"></span><span class="sparkle s2"></span><span class="sparkle s3"></span>
+        <img class="cat-img" src="cat.png" alt="cat">
+      </div>
+
+      <h1 class="title-pink">Hi my love!</h1>
+      <h2 class="subtitle-pink">i got a suprise for you</h2>
+
+      <div class="btn-row">
+        <button class="btn" id="yes1">YES</button>
+        <button class="btn" id="no1">NO</button>
+      </div>
+
+      <div id="noMsg" style="display:none;color:var(--pink);font-weight:700;">urbi ki bacchiii😊, press YES</div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide s-white" id="slide2">
+      <div class="cat-wrap">
+        <span class="sparkle s1"></span><span class="sparkle s2"></span><span class="sparkle s3"></span>
+        <img class="cat-img" src="cat3.png" alt="cat">
+      </div>
+
+      <h1 class="title-pink">Are you ready ?</h1>
+      <div class="btn-row">
+        <button class="btn" id="yes2">YES</button>
+      </div>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide s-fireworks" id="slide3">
+      <canvas id="fwCanvas"></canvas>
+      <div class="fw-content">
+        <h1 class="fw-title">Happy new yearrrrr<br>My love</h1>
+        <button class="btn fw-btn" id="next3">NEXT</button>
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide s-gifts" id="slide4">
+      <h1 class="g-title">Happy birthdayyy 🎂</h1>
+      <p class="g-sub">Gifts for you ✨ pick one</p>
+
+      <div class="gift-row">
+        <div class="gift" id="gift1" title="Love letter">💌</div>
+        <div class="gift" id="gift2" title="Bouquet">💐</div>
+        <div class="gift" id="gift3" title="Best moments">⭐</div>
+        <div class="gift" id="gift4" title="A song">🎶</div>
+      </div>
+
+      <div style="margin-top:22px;">
+        <button class="btn ghost" id="backToFireworks">← Back</button>
+      </div>
+    </section>
+
+    <!-- Gift 1 -->
+    <section class="slide s-letter" id="slide5">
+      <div>
+        <h1 class="letter-big">HAPPY<br>NEWYEAR,<br>MY LOVE.</h1>
+        <p class="letter-para">I love you more than words can express.</p>
+        <p class="letter-para">May our love continue to blossom and flourish forever.</p>
+        <div class="signature">With all my heart, Arham</div>
+
+        <div style="margin-top:18px;">
+          <button class="btn ghost small" id="backFrom5">← Back</button>
+        </div>
+      </div>
+
+      <div class="photo-card">
+        <img src="urbi.jpg" alt="Urbi">
+      </div>
+    </section>
+
+    <!-- Gift 2 -->
+    <section class="slide s-bouquet" id="slide6">
+      <div class="bouquet-text" id="bouquetText">
+babyyyyyyy
+take this small virtual bouquet for your birthday.
+I wish i could hand you real flowers but nhi,
+kisi ko to  milna hi nhi hai.
+kya laga th aapko?
+ki mera flower aayega hi nhi?,
+until i get to see you,
+I hope these carry a bit of my love and warmth.
+      </div>
+
+      <div class="bouquet-scene" id="bouquetScene">
+        <img src="cat2.png" class="bouquet-cat" alt="cat bouquet">
+        <div class="bouquet-emoji">💐</div>
+
+        <div class="fx h1">💗</div>
+        <div class="fx h2">💖</div>
+        <div class="fx s1">✨</div>
+        <div class="fx s2">⭐</div>
+      </div>
+
+      <div style="position:absolute; left:28px; bottom:28px;">
+        <button class="btn ghost small" id="backFrom6">← Back</button>
+      </div>
+    </section>
+
+    <!-- Gift 3 -->
+    <section class="slide s-moments" id="slide7">
+      <div class="paper-texture"></div>
+      <div class="sticker-row">📷 ✦ ➜ 🎧</div>
+      <div class="doodle star">★</div>
+      <div class="doodle dots">⋯⋯⋯</div>
+      <div class="doodle arrow">➜</div>
+
+      <div class="mom-title">Best<br>Moment!</div>
+
+      <div class="photo-polaroid left">
+        <img src="moment1.jpg" alt="Moment 1">
+      </div>
+
+      <div class="photo-polaroid right">
+        <img src="moment2.jpg" alt="Moment 2">
+      </div>
+
+      <div class="torn-blue"></div>
+
+      <div style="position:absolute; left:28px; bottom:28px; z-index:5;">
+        <button class="btn ghost small" id="backFrom7">← Back</button>
+      </div>
+    </section>
+
+    <!-- Gift 4 -->
+    <section class="slide s-music" id="slide8">
+      <div>
+        <h1 class="music-head">A song for you</h1>
+        <p class="music-sub">A Thousand Years</p>
+
+        <img class="poster" src="poster.jpg" alt="Poster">
+
+        <div class="music-controls">
+          <button class="btn" id="playBtn">PLAY</button>
+          <button class="btn ghost" id="pauseBtn">PAUSE</button>
+          <button class="btn ghost" id="backFrom8">← Back</button>
+        </div>
+
+        
+      </div>
+
+      <div class="disc-wrap">
+        <img id="discImg" class="disc" src="disc.jpg" alt="Disc">
+      </div>
+
+      <audio id="audio" preload="auto">
+        <source src="a_thousand_years.mp3" type="audio/mpeg">
+      </audio>
+    </section>
+
+  </div>
+
+  <script>
+    // ---------- Navigation ----------
+    function show(id){
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+
+      // stop music when switching slides
+      stopMusic();
+
+      const el = document.getElementById(id);
+      if(el){
+        el.classList.add('active');
+      }
+
+      // restart bouquet animation cleanly every time
+      if(id === 'slide6'){
+        restartBouquetAnimation();
+      }
+
+      // start fireworks only when entering slide3 (after yes2)
+      if(id === 'slide3'){
+        startFireworks();
+      }
+    }
+
+    // ---------- Slide 1 / 2 handlers ----------
+    const noMsg = document.getElementById('noMsg');
+    document.getElementById('no1').addEventListener('click', () => {
+      noMsg.style.display = 'block';
+      noMsg.animate([{opacity:0, transform:'translateY(-4px)'},{opacity:1, transform:'translateY(0)'}], {duration:260, easing:'ease'});
+    });
+
+    document.getElementById('yes1').addEventListener('click', () => show('slide2'));
+    document.getElementById('yes2').addEventListener('click', () => show('slide3'));
+    document.getElementById('next3').addEventListener('click', () => show('slide4'));
+    document.getElementById('backToFireworks').addEventListener('click', () => show('slide3'));
+
+    // ---------- Gift buttons (with pop) ----------
+    function popAndGo(btnEl, slideId){
+      btnEl.classList.remove('pop');
+      void btnEl.offsetWidth;
+      btnEl.classList.add('pop');
+      setTimeout(() => show(slideId), 120);
+    }
+
+    const g1 = document.getElementById('gift1');
+    const g2 = document.getElementById('gift2');
+    const g3 = document.getElementById('gift3');
+    const g4 = document.getElementById('gift4');
+
+    g1.addEventListener('click', ()=> popAndGo(g1,'slide5'));
+    g2.addEventListener('click', ()=> popAndGo(g2,'slide6'));
+    g3.addEventListener('click', ()=> popAndGo(g3,'slide7'));
+    g4.addEventListener('click', ()=> popAndGo(g4,'slide8'));
+
+    // back buttons
+    document.getElementById('backFrom5').addEventListener('click', ()=> show('slide4'));
+    document.getElementById('backFrom6').addEventListener('click', ()=> show('slide4'));
+    document.getElementById('backFrom7').addEventListener('click', ()=> show('slide4'));
+    document.getElementById('backFrom8').addEventListener('click', ()=> show('slide4'));
+
+    // ---------- Gift 2: restart animation every open ----------
+    function restartBouquetAnimation(){
+      const slide = document.getElementById('slide6');
+
+      // remove & re-add active to retrigger CSS animations reliably
+      slide.classList.remove('active');
+      void slide.offsetWidth; // force reflow
+      slide.classList.add('active');
+    }
+
+    // ---------- Music (Gift 4) ----------
+    const audio = document.getElementById('audio');
+    const disc  = document.getElementById('discImg');
+
+    function startMusic(){
+      audio.play().then(() => {
+        disc.classList.add('playing');
+      }).catch(() => {
+        alert("Audio didn’t play. Make sure a_thousand_years.mp3 is in the same floder.");
+      });
+    }
+    function pauseMusic(){
+      audio.pause();
+      disc.classList.remove('playing');
+    }
+    function stopMusic(){
+      audio.pause();
+      audio.currentTime = 0;
+      disc.classList.remove('playing');
+    }
+
+    document.getElementById('playBtn').addEventListener('click', startMusic);
+    document.getElementById('pauseBtn').addEventListener('click', pauseMusic);
+
+    // ---------- Fireworks ----------
+    let fwRunning = false;
+    function startFireworks(){
+      const canvas = document.getElementById('fwCanvas');
+      const ctx = canvas.getContext('2d');
+
+      function resize(){
+        canvas.width = canvas.clientWidth * devicePixelRatio;
+        canvas.height = canvas.clientHeight * devicePixelRatio;
+      }
+      resize();
+
+      const bursts = [];
+      const rnd = (a,b)=>a+Math.random()*(b-a);
+
+      function burst(){
+        const x = rnd(canvas.width*0.2, canvas.width*0.85);
+        const y = rnd(canvas.height*0.15, canvas.height*0.55);
+        const count = Math.floor(rnd(18, 30));
+        const speed = rnd(1.6, 2.8) * devicePixelRatio;
+        const hue = rnd(10, 55);
+
+        const parts = [];
+        for(let i=0;i<count;i++){
+          const ang = (Math.PI*2) * (i/count) + rnd(-0.1,0.1);
+          parts.push({
+            x, y,
+            vx: Math.cos(ang)*speed*rnd(0.8,1.2),
+            vy: Math.sin(ang)*speed*rnd(0.8,1.2),
+            life: rnd(35, 55),
+            hue,
+            a: 1
+          });
+        }
+        bursts.push(parts);
+      }
+
+      let t = 0;
+      fwRunning = true;
+
+      function tick(){
+        if(!document.getElementById('slide3').classList.contains('active')){
+          fwRunning = false;
+        }
+        if(!fwRunning) return;
+
+        t++;
+        if(t % 28 === 0) burst();
+
+        ctx.fillStyle = 'rgba(0,0,0,0.18)';
+        ctx.fillRect(0,0,canvas.width, canvas.height);
+
+        for(let b=bursts.length-1;b>=0;b--){
+          const parts = bursts[b];
+          for(let p=parts.length-1;p>=0;p--){
+            const pt = parts[p];
+            pt.x += pt.vx;
+            pt.y += pt.vy;
+            pt.vy += 0.02 * devicePixelRatio;
+            pt.life -= 1;
+            pt.a = Math.max(0, pt.life/55);
+
+            ctx.beginPath();
+            ctx.fillStyle = `rgba(255, ${Math.floor(140 + pt.hue*2)}, 80, ${pt.a})`;
+            ctx.arc(pt.x, pt.y, 2.2*devicePixelRatio, 0, Math.PI*2);
+            ctx.fill();
+
+            if(pt.life <= 0) parts.splice(p,1);
+          }
+          if(parts.length === 0) bursts.splice(b,1);
+        }
+
+        requestAnimationFrame(tick);
+      }
+
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+      tick();
+    }
+  </script>
+</body>
+</html>
